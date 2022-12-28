@@ -1,177 +1,58 @@
-# Microservices Architectures with (Spring Cloud Config, Consul Discovery, Consul Config,Vault)
-
-## Project Architecture
-
-## Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209438466-f5708731-d5fa-46c6-a235-04c9b5fd4f1c.png)
-
-## Consul
-
-Consul is a powerful service networking tool that enables services to discover and connect with each other.
-
-- To start the Consul server, you can use the following command:
-```bash
-consul agent -server -bootstrap-expect=1 -data-dir=DATA_FOLDER_HERE -ui -bind=YOUR_IP_HERE
-```
-
-### My Result 
-
-![image](https://user-images.githubusercontent.com/94486861/209437987-c466b214-7a53-409a-b6f8-fab7182985cb.png)
-
-## Gateway Service
-Start up point
-```java
-@SpringBootApplication
-public class GatewaysServiceApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(GatewaysServiceApplication.class,args);
-    }
-
-    @Bean
-    DiscoveryClientRouteDefinitionLocator locator(ReactiveDiscoveryClient rdc, DiscoveryLocatorProperties dlp){
-        return new DiscoveryClientRouteDefinitionLocator(rdc,dlp);
-    }
-
-}
-```
-
-#### Configuration File
-contains `config-service`  and [`CORS`](https://fr.wikipedia.org/wiki/Cross-origin_resource_sharing) configuration
-
-```properties
-server:
-  port: 9999
-spring:
-  application:
-    name: gateway-service
-  config:
-    import: optional:configserver:http://localhost:5544
-  cloud:
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:4200"
-            allowedHeaders: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - DELETE
-              - PUT
-
-```
-
-#### Test 
-`order-servie`
-
-![image](https://user-images.githubusercontent.com/94486861/209437774-75a84c3d-2575-4700-9efe-07ff9a0ac4f0.png)
-
-`customer-servie`
-
-![image](https://user-images.githubusercontent.com/94486861/209437803-6961129d-0e20-46ed-ad57-50dcdffb25de.png)
-
-`inventory-serivce`
-
-![image](https://user-images.githubusercontent.com/94486861/209437813-de944203-2610-4368-b649-1be08a29bfe7.png)
-
-`billing-serivce`
-
-![image](https://user-images.githubusercontent.com/94486861/209438427-8787c080-00cb-4a8b-b97b-8c04a42ed2e6.png)
-
-
-## Config Service
-This service provides us ability to stores configuration data in a version control system Git, and allows other services to retrieve this data from it at runtime.
-
-```yml
-server:
-  port: 5544
-spring:
-  application:
-    name: config-service
-  cloud:
-    config:
-      server:
-        git:
-          uri: REPO_PATH
-          default-label: master
-```
-### Test 
-test `customer-service` simple configuration
-
-![image](https://user-images.githubusercontent.com/94486861/209437384-7ac6f6cc-7770-449b-a44d-7f030acfee24.png)
-
-## Customer Service
-### Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209438538-d5f6078e-8a5e-480f-9d8d-1f2162111615.png)
-
-### Test
-
-![image](https://user-images.githubusercontent.com/94486861/209438632-630512ac-59f6-414b-a566-98c6bb79e8b5.png)
-
-## Inventory Service
-### Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209438697-960654b6-ab61-4e8e-a719-dd01cb0d4b40.png)
-### Configuration
-```properties
-server:
-  port: 8787
-spring:
-  application:
-    name: order-service
-  h2:
-    console:
-      enabled: true
-  datasource:
-    url: jdbc:h2:mem:orders-db
-  #
-  config:
-    import: optional:configserver:http://localhost:5544
-logging:
-  level:
-    me.ketlas.orderservice.services.CustomerRestClientService: debug
-    me.ketlas.orderservice.services.ProductRestClientService: debug
-
-```
-### Test
-![image](https://user-images.githubusercontent.com/94486861/209438740-9663cbf3-eb7d-471f-a5fa-7d5bfd0bd6c4.png)
-
-## Order Service
-### Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209438772-17df8c72-2141-4956-bea1-b86feb8dca86.png)
-
-### Test
-![image](https://user-images.githubusercontent.com/94486861/209438801-8da0c591-61e7-445b-8a19-b913310b5e90.png)
-
-## Billing Service
-### Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209438970-452cdf62-1ccb-4e7e-a556-e3322ca83dc7.png)
-
-### Test
-![image](https://user-images.githubusercontent.com/94486861/209438427-8787c080-00cb-4a8b-b97b-8c04a42ed2e6.png)
-
-## FrontEnd
-
-### Project Structure
-![image](https://user-images.githubusercontent.com/94486861/209439049-095f8846-6019-4e40-be77-4f8fe61378cc.png)
-
-### Products List
-![image](https://user-images.githubusercontent.com/94486861/209440238-38c80345-d99a-4844-937f-118cf71aae28.png)
-
-### Customers List
-![image](https://user-images.githubusercontent.com/94486861/209440282-057777d9-6b83-4b26-b212-26511a43c1c0.png)
-
-
-### Customer Orders List
-![image](https://user-images.githubusercontent.com/94486861/209440326-072e33be-0369-40d9-b3b3-9bddbd3574ef.png)
-
-
-### Order Details
-![image](https://user-images.githubusercontent.com/94486861/209440719-a36aeaf2-0093-41dc-a0df-2ee34449fc47.png)
+# Microservices with Keycloak
 
 
 
+1. Download Keycloak 19 from the Keycloak official website (https://www.keycloak.org/downloads).
 
+![image](https://user-images.githubusercontent.com/94486861/209845852-db298929-7674-4dd5-87a3-fe1e8b6fb8a6.png)
+
+2. Once downloaded, start Keycloak by running the `kc.bat start-dev` in the Keycloak installation directory.
+
+![image](https://user-images.githubusercontent.com/94486861/209846159-c741a3de-9726-4a61-967a-5a98b4386f7a.png)
+
+3. Once Keycloak is started, access the management interface using the URL http://localhost:8080 and click the "Admin Console" button.
+
+![image](https://user-images.githubusercontent.com/94486861/209846289-5b05da76-1558-4440-bc2c-690ee79d652c.png)
+
+4. Create an Admin account by following the instructions displayed on the screen.
+
+![image](https://user-images.githubusercontent.com/94486861/209846454-b407abe5-3c0f-477a-840d-94ae70ee7c82.png)
+
+5. Once logged in as an Admin, create a new Realm by clicking the "Add realm" button and following the instructions displayed.
+
+![image](https://user-images.githubusercontent.com/94486861/209846573-70140e09-8c87-4c07-bf3d-13779fea0b81.png)
+
+![image](https://user-images.githubusercontent.com/94486861/209846696-b058b0b2-5d21-43cd-a94a-46f7b43836ec.png)
+
+
+
+6. Create a new client by clicking the "Clients" button in the "Configuration" section of the Realm, then clicking the "Create" button. Enter the client details and select "Confidential" as the client type.
+
+![image](https://user-images.githubusercontent.com/94486861/209846775-2362f51c-2d72-4b76-a123-e930350edd11.png)
+
+![image](https://user-images.githubusercontent.com/94486861/209847005-7823b3c6-cff0-48df-9160-add2be6f52d1.png)
+
+![image](https://user-images.githubusercontent.com/94486861/209847439-9d65f26b-0ae8-4b86-bbb4-ee65ff682dcd.png)
+
+7. Create users by clicking the "Users" button in the "Management" section of the Realm, then clicking the "Add user" button. Enter the user details and set a password for the user.
+
+![image](https://user-images.githubusercontent.com/94486861/209847545-b00a8598-9d42-441f-9bc2-5be40d46c907.png)
+
+![image](https://user-images.githubusercontent.com/94486861/209847704-8971e7df-1a84-4b6f-be58-16f15ae7d02c.png)
+
+8. Create roles by clicking the "Roles" button in the "Management" section of the Realm, then clicking the "Add Role" button. Enter the role name and set its permissions.
+Assign roles to users by selecting the user from the list of users and clicking the "Role Mappings" button. Select the roles to be assigned to the user and click "Save".
+
+![image](https://user-images.githubusercontent.com/94486861/209847768-eab7fa4d-50a1-4fd3-b1af-fa0e1758a007.png)
+
+![image](https://user-images.githubusercontent.com/94486861/209847828-2713b352-40b8-4a8c-8693-ef5f1db1a615.png)
+
+### Test authentication with Postman:
+
+Enter the URL of the API you want to test in the address bar and select "POST" as the request type.
+In the body of request enter the following information: `client_id`, `username`, `password`, `grant_type`
+
+![image](https://user-images.githubusercontent.com/94486861/209849182-dd1c3559-1c33-4b70-9323-c7561b358a71.png)
 
 
 
