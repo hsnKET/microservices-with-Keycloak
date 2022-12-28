@@ -1,0 +1,17 @@
+server:
+  port: 8787
+spring:
+  application:
+    name: order-service
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:orders-db
+  #
+  config:
+    import: optional:configserver:http://localhost:5544
+logging:
+  level:
+    me.ketlas.orderservice.services.CustomerRestClientService: debug
+    me.ketlas.orderservice.services.ProductRestClientService: debug

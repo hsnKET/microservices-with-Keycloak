@@ -1,0 +1,20 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: gateway-service
+  config:
+    import: optional:configserver:http://localhost:5544
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+

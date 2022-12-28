@@ -1,0 +1,41 @@
+<div class="container">
+
+  <div *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+
+  <div class="card mt-4 mb-2">
+    <div class="card-header">
+      Customer Orders List
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Created At</th>
+          <th scope="col">Customer Id</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let o of orders">
+          <td>{{o.id}}</td>
+          <td>{{o.createdAt | date: 'yyyy-MM-dd hh:mm'}}</td>
+          <td>{{o.customerId}}</td>
+          <td>{{o.status}}</td>
+          <td class="text-center">
+            <button class="btn  btn-secondary"  (click)="onOrderDetail(o.id)">Order Details</button>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+
+
+
+
+</div>

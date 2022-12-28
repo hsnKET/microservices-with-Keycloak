@@ -1,0 +1,13 @@
+server:
+  port: 8585
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:inventory-db
+  #
+  config:
+    import: optional:configserver:http://localhost:5544
+  application:
+    name: inventory-service
